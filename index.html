@@ -12,16 +12,32 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600;700&family=Nunito:wght@400;600;800&display=swap');
-        h1, h2, h3, h4, .font-heading { font-family: 'Fredoka', sans-serif; }
+        /* Updated Font: 'Bevan' added to match the "DUMFURZ'S" image style (Bold Slab Serif).
+           Kept 'Nunito' for readable body text.
+        */
+        @import url('https://fonts.googleapis.com/css2?family=Bevan:ital@0;1&family=Nunito:wght@400;600;800&display=swap');
+        
+        h1, h2, h3, h4, .font-heading { font-family: 'Bevan', serif; letter-spacing: 0.05em; }
         body { font-family: 'Nunito', sans-serif; }
+        
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
         html { scroll-behavior: smooth; }
         .perspective-1000 { perspective: 1000px; }
+
+        /* New Background: Inferred from the 'dumfurz.jpg' image.
+           A radial gradient that is mossy green in the center and fades to almost black at the edges.
+           Fixed attachment ensures the vignette stays in place while scrolling.
+        */
+        body {
+            background: radial-gradient(circle at center, #2f5e41 0%, #0f3d25 40%, #051a0d 70%, #000000 100%);
+            background-attachment: fixed;
+            color: #e2e8f0; /* Light text default for dark background */
+        }
     </style>
 </head>
-<body class="bg-[#0a2e18]">
+<body>
     
     <div id="root"></div>
 
@@ -40,45 +56,25 @@
 
         // --- SVG ASSETS ---
         const WormMascot = ({ scrollY, mouseX, mouseY }) => {
-          const bodyX = mouseX * 0.02;
-          const bodyY = mouseY * 0.02 + scrollY * 0.1;
-          const faceX = mouseX * 0.04;
-          const faceY = mouseY * 0.04 + scrollY * 0.15;
-          const glassesX = mouseX * 0.06;
-          const glassesY = mouseY * 0.06 + scrollY * 0.2;
-
+          // Movement factors for parallax effect
+          const imageX = mouseX * 0.02;
+          const imageY = mouseY * 0.02;
+          
           return (
-            <div className="relative w-56 h-56 md:w-80 md:h-80 mx-auto perspective-1000 my-6">
-              <div className="absolute inset-0 transition-transform duration-100 ease-out will-change-transform z-10"
-                   style={{ transform: `translate(${bodyX}px, ${bodyY}px)` }}>
-                <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-2xl">
-                  <path d="M40,160 C20,160 10,140 30,120 C50,100 40,80 60,60 C80,40 120,40 140,60 C160,80 180,90 170,130 C160,170 120,180 90,170 C60,160 60,160 40,160" fill="#ff80bf" stroke="#ff5cac" strokeWidth="3" />
-                  <circle cx="30" cy="130" r="3" fill="#ffb3d9" />
-                  <circle cx="150" cy="70" r="4" fill="#ffb3d9" />
-                  <circle cx="100" cy="50" r="3" fill="#ffb3d9" />
-                  <circle cx="80" cy="160" r="4" fill="#ffb3d9" />
-                </svg>
-              </div>
-              <div className="absolute inset-0 transition-transform duration-100 ease-out will-change-transform z-20"
-                   style={{ transform: `translate(${faceX}px, ${faceY}px)` }}>
-                <svg viewBox="0 0 200 200" className="w-full h-full">
-                   <ellipse cx="120" cy="100" rx="35" ry="30" fill="#ff99cc" opacity="0.6" />
-                   <path d="M110,115 Q120,125 130,115" fill="none" stroke="#be185d" strokeWidth="3" strokeLinecap="round" />
-                </svg>
-              </div>
-              <div className="absolute inset-0 transition-transform duration-100 ease-out will-change-transform z-30"
-                   style={{ transform: `translate(${glassesX}px, ${glassesY}px) rotate(${mouseX * 0.01}deg)` }}>
-                <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-lg">
-                   <circle cx="105" cy="95" r="12" fill="black" opacity="0.9" />
-                   <circle cx="135" cy="95" r="12" fill="black" opacity="0.9" />
-                   <line x1="117" y1="95" x2="123" y2="95" stroke="black" strokeWidth="2" />
-                   <circle cx="105" cy="95" r="4" fill="white" className="animate-pulse" />
-                   <circle cx="135" cy="95" r="4" fill="white" className="animate-pulse" />
-                   <path d="M100,90 L110,90" stroke="white" strokeWidth="2" opacity="0.5" />
-                </svg>
-              </div>
-              <div className="absolute top-0 right-10 animate-bounce" style={{ animationDuration: '3s' }}>
-                <Leaf className="text-green-400 w-12 h-12 drop-shadow-lg" />
+            <div className="relative w-64 h-64 md:w-80 md:h-80 mx-auto perspective-1000 my-6">
+              
+              {/* Main Character Image Container - Moves slightly with mouse */}
+              <div className="relative w-full h-full transition-transform duration-100 ease-out will-change-transform z-10"
+                   style={{ transform: `translate(${imageX}px, ${imageY}px)` }}>
+                
+                {/* PLACEHOLDER FOR MASCOT PNG
+                    Replace 'dumf-Photoroom.jpg' with your final mascot PNG file path.
+                */}
+                <img 
+                  src="dumf-mascot.png" 
+                  alt="Dumfurz Mascot" 
+                  className="w-full h-full object-contain drop-shadow-2xl"
+                />
               </div>
             </div>
           );
@@ -120,23 +116,23 @@
           };
 
           return (
-            <div className="font-sans text-slate-800 min-h-screen overflow-x-hidden selection:bg-pink-400 selection:text-white">
+            <div className="font-sans text-slate-100 min-h-screen overflow-x-hidden selection:bg-pink-400 selection:text-white">
               
               {/* Navigation */}
               <nav className="fixed w-full z-50 top-0 px-6 py-4 transition-all duration-300" 
-                   style={{ backgroundColor: scrollY > 50 ? 'rgba(10, 46, 24, 0.95)' : 'transparent', backdropFilter: scrollY > 50 ? 'blur(10px)' : 'none' }}>
+                   style={{ backgroundColor: scrollY > 50 ? 'rgba(5, 26, 13, 0.95)' : 'transparent', backdropFilter: scrollY > 50 ? 'blur(10px)' : 'none' }}>
                 <div className="max-w-7xl mx-auto flex justify-between items-center">
                   <div className="text-2xl font-heading font-bold text-white tracking-wider flex items-center gap-2 cursor-pointer" onClick={() => window.scrollTo(0,0)}>
                     <span className="text-pink-400 text-3xl">$</span>DUMF
                   </div>
                   
                   <div className="hidden md:flex items-center gap-8 text-white font-bold text-sm tracking-wide">
-                    {['About', 'How to Buy'].map((item) => (
+                    {['About', 'Constitution', 'How to Buy'].map((item) => (
                       <a key={item} href={`#${item.toLowerCase().replace(/\s/g, '')}`} className="hover:text-pink-400 transition-colors uppercase">
                         {item}
                       </a>
                     ))}
-                    <button onClick={handleBuy} className="bg-yellow-400 hover:bg-yellow-300 text-black px-6 py-2 rounded-full font-bold shadow-lg shadow-yellow-400/20 transform hover:-translate-y-1 transition-all">
+                    <button onClick={handleBuy} className="bg-yellow-400 hover:bg-yellow-300 text-black px-6 py-2 rounded-full font-bold shadow-lg shadow-yellow-400/20 transform hover:-translate-y-1 transition-all font-heading">
                       Connect Wallet
                     </button>
                   </div>
@@ -148,7 +144,7 @@
                 {/* Mobile Menu */}
                 {menuOpen && (
                   <div className="absolute top-full left-0 w-full bg-[#0f3d22] text-white p-6 flex flex-col gap-4 shadow-xl border-t border-white/10 animate-fade-in-down">
-                      {['About', 'How to Buy'].map((item) => (
+                      {['About', 'Constitution', 'How to Buy'].map((item) => (
                       <a key={item} href={`#${item.toLowerCase().replace(/\s/g, '')}`} onClick={() => setMenuOpen(false)} className="text-lg font-bold">
                         {item}
                       </a>
@@ -161,7 +157,7 @@
               </nav>
 
               {/* Hero Section */}
-              <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#082412] to-[#0a2e18] pt-20 pb-32">
+              <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-32">
                 <div className="absolute inset-0 pointer-events-none opacity-30">
                   {[...Array(20)].map((_, i) => (
                     <div key={i} className="absolute bg-white rounded-full opacity-20 animate-pulse"
@@ -181,28 +177,28 @@
                   <WormMascot scrollY={scrollY} mouseX={mousePos.x} mouseY={mousePos.y} />
                   
                   <div className="flex flex-col md:flex-row gap-4 justify-center items-center mt-12">
-                    <button onClick={handleBuy} className="bg-[#d68c9e] hover:bg-[#c07a8b] text-white text-xl px-10 py-4 rounded-full font-bold shadow-[0_0_30px_rgba(214,140,158,0.4)] transform hover:scale-105 transition-all duration-300 w-full md:w-auto">
+                    <button onClick={handleBuy} className="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 hover:opacity-90 text-white text-xl px-10 py-4 rounded-full font-bold shadow-[0_0_30px_rgba(236,72,153,0.4)] transform hover:scale-105 transition-all duration-300 w-full md:w-auto font-heading tracking-wide">
                       Buy $DUMF
                     </button>
-                    <a href="#about" className="border-2 border-white/30 hover:border-white text-white text-xl px-10 py-4 rounded-full font-bold backdrop-blur-sm hover:bg-white/10 transition-all duration-300 w-full md:w-auto flex items-center justify-center gap-2">
-                      <Users size={20} /> Community
+                    <a href="#about" className="border-2 border-white/30 hover:border-white text-white text-xl px-10 py-4 rounded-full font-bold backdrop-blur-sm hover:bg-white/10 transition-all duration-300 w-full md:w-auto flex items-center justify-center gap-2 font-heading tracking-wide">
+                      <Users size={20} /> Constitution
                     </a>
                   </div>
                 </div>
               </section>
 
               {/* Value Props Section */}
-              <section className="relative z-20 py-24 px-4 bg-[#0a2e18]">
+              <section className="relative z-20 py-24 px-4">
                 <div className="max-w-7xl mx-auto">
                   <div className="text-center mb-16">
-                    <h2 className="text-[#a5d6a7] font-bold tracking-[0.15em] text-lg md:text-xl uppercase">
+                    <h2 className="text-[#a5d6a7] font-bold tracking-[0.15em] text-lg md:text-xl uppercase font-heading">
                       The Cutest Worm in Crypto
                     </h2>
                   </div>
 
                   <div className="grid md:grid-cols-3 gap-8">
                     {/* Card 1: Safe & Snug */}
-                    <div className="bg-[#fffbf0] rounded-[2.5rem] p-10 flex flex-col items-start text-left h-full hover:-translate-y-2 transition-transform duration-300">
+                    <div className="bg-[#fffbf0]/90 backdrop-blur-sm rounded-[2.5rem] p-10 flex flex-col items-start text-left h-full hover:-translate-y-2 transition-transform duration-300 shadow-xl">
                       <div className="bg-white w-20 h-20 rounded-[1.5rem] flex items-center justify-center mb-8 shadow-sm">
                          <Lock className="text-[#ec4899]" size={32} strokeWidth={2.5} />
                       </div>
@@ -213,7 +209,7 @@
                     </div>
 
                     {/* Card 2: Rainbow Swap */}
-                    <div className="bg-[#fffbf0] rounded-[2.5rem] p-10 flex flex-col items-start text-left h-full hover:-translate-y-2 transition-transform duration-300">
+                    <div className="bg-[#fffbf0]/90 backdrop-blur-sm rounded-[2.5rem] p-10 flex flex-col items-start text-left h-full hover:-translate-y-2 transition-transform duration-300 shadow-xl">
                       <div className="bg-white w-20 h-20 rounded-[1.5rem] flex items-center justify-center mb-8 shadow-sm">
                          <Sparkles className="text-[#6366f1]" size={32} strokeWidth={2.5} />
                       </div>
@@ -224,7 +220,7 @@
                     </div>
 
                     {/* Card 3: Community Driven */}
-                    <div className="bg-[#fffbf0] rounded-[2.5rem] p-10 flex flex-col items-start text-left h-full hover:-translate-y-2 transition-transform duration-300">
+                    <div className="bg-[#fffbf0]/90 backdrop-blur-sm rounded-[2.5rem] p-10 flex flex-col items-start text-left h-full hover:-translate-y-2 transition-transform duration-300 shadow-xl">
                       <div className="bg-white w-20 h-20 rounded-[1.5rem] flex items-center justify-center mb-8 shadow-sm">
                          <Heart className="text-[#ef4444]" size={32} strokeWidth={2.5} />
                       </div>
@@ -238,16 +234,16 @@
               </section>
 
               {/* About Section - Unified Constitution Dossier */}
-              <section id="about" className="py-24 px-4 bg-[#fffbf0] rounded-t-[3rem] relative z-10">
+              <section id="about" className="py-24 px-4 relative z-10">
                 <div className="max-w-5xl mx-auto">
                   
-                  <div className="bg-[#051a0d] rounded-[3rem] p-8 md:p-12 relative overflow-hidden shadow-2xl border-4 border-[#1a4d2e]">
+                  <div className="bg-[#051a0d]/80 backdrop-blur-md rounded-[3rem] p-8 md:p-12 relative overflow-hidden shadow-2xl border-4 border-[#1a4d2e]">
                     
                     {/* Background Effects */}
                     <div className="absolute inset-0 opacity-20 pointer-events-none" 
                          style={{ backgroundImage: 'linear-gradient(#000 50%, transparent 50%)', backgroundSize: '100% 4px' }}>
                     </div>
-                    <div className="absolute top-1/2 right-0 -translate-y-1/2 text-[#1a4d2e]/10 text-[20rem] font-heading font-bold pointer-events-none select-none rotate-12 whitespace-nowrap">
+                    <div className="absolute top-1/2 right-0 -translate-y-1/2 text-[#1a4d2e]/20 text-[20rem] font-heading font-bold pointer-events-none select-none rotate-12 whitespace-nowrap opacity-30">
                       DUMF
                     </div>
 
@@ -260,7 +256,7 @@
                          
                          {/* Character Image - Increased size to fill space */}
                          <img 
-                           src="dumf-consititution.png" 
+                           src="dumf-Photoroom.jpg" 
                            alt="Official Dumf Member" 
                            className="relative w-[130%] max-w-none h-auto object-contain drop-shadow-2xl transform transition-transform group-hover:scale-[1.02] z-10 -ml-[15%]"
                          />
@@ -276,7 +272,7 @@
                       <div className="w-full md:w-1/2 font-mono text-left pl-0 md:pl-4">
                         <div className="border-b-2 border-[#1a4d2e] pb-6 mb-6">
                           <h2 className="text-4xl md:text-5xl font-heading font-extrabold text-[#4ade80] mb-2 tracking-wide">
-                            CONSTITUTION <span className="text-[#d68c9e] text-xl align-top opacity-80">v1.0</span>
+                            CONSTITUTION <span className="text-[#d68c9e] text-xl align-top opacity-80 font-sans font-bold">v1.0</span>
                           </h2>
                           <div className="flex items-center gap-2 text-[#d68c9e] font-bold tracking-widest text-sm uppercase">
                             <Sparkles size={16} /> Protocol: "Diamond Hands"
@@ -325,7 +321,7 @@
 
                         {/* Sign Button */}
                         <div className="mt-8 pt-6 border-t border-[#1a4d2e] flex flex-col sm:flex-row items-center gap-4">
-                          <button onClick={handleBuy} className="bg-[#4ade80] hover:bg-[#32b565] text-[#051a0d] text-lg px-8 py-3 rounded-xl font-bold shadow-lg shadow-[#4ade80]/20 transform hover:-translate-y-1 transition-all w-full sm:w-auto flex items-center justify-center gap-2">
+                          <button onClick={handleBuy} className="bg-[#4ade80] hover:bg-[#32b565] text-[#051a0d] text-lg px-8 py-3 rounded-xl font-bold shadow-lg shadow-[#4ade80]/20 transform hover:-translate-y-1 transition-all w-full sm:w-auto flex items-center justify-center gap-2 font-heading tracking-wide">
                              Mint Badge <FileCheck size={20} />
                           </button>
                           <div className="text-[#1a4d2e] text-xs font-bold tracking-[0.2em] uppercase text-center sm:text-left">
@@ -341,27 +337,45 @@
               </section>
 
               {/* How to Buy Section */}
-              <section id="howtobuy" className="py-24 px-4 bg-white relative">
-                <div className="max-w-4xl mx-auto">
-                  <h2 className="text-5xl font-heading font-bold text-center text-[#1a4d2e] mb-16">The Quest for $DUMF</h2>
+              <section id="howtobuy" className="py-24 px-4 relative overflow-hidden">
+                <div className="max-w-4xl mx-auto relative z-10">
+                  <h2 className="text-5xl font-heading font-bold text-center mb-16 text-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] tracking-wide">
+                    The Quest for $DUMF
+                  </h2>
+                  
                   <div className="relative">
-                    <div className="absolute left-8 top-0 bottom-0 w-1 bg-gray-100 rounded-full md:left-1/2 md:-ml-0.5"></div>
-                    {[ { title: "Get a Wallet", text: "Download Metamask or Phantom.", icon: "👛" },
-                       { title: "Get Some ETH/SOL", text: "You need gas to fuel the wiggle.", icon: "⛽" },
-                       { title: "Go to RainbowRoads", text: "Our official swap partner.", icon: "🌈" },
-                       { title: "Swap for $DUMF", text: "Welcome to the colony.", icon: "🐛" }
+                    {/* Rainbow Timeline Line */}
+                    <div className="absolute left-8 top-0 bottom-0 w-1 bg-gradient-to-b from-pink-500 via-yellow-400 to-blue-500 rounded-full md:left-1/2 md:-ml-0.5 shadow-[0_0_10px_rgba(255,255,255,0.2)]"></div>
+                    
+                    {[ 
+                       { title: "Get a Wallet", text: "Download Metamask or Phantom.", icon: "👛", 
+                         border: "border-pink-500", textCol: "text-pink-400", bg: "bg-gradient-to-br from-pink-900/30 to-black/60" },
+                       { title: "Get Some ETH/SOL", text: "You need gas to fuel the wiggle.", icon: "⛽", 
+                         border: "border-yellow-500", textCol: "text-yellow-400", bg: "bg-gradient-to-br from-yellow-900/30 to-black/60" },
+                       { title: "Go to RainbowRoads", text: "Our official swap partner.", icon: "🌈", 
+                         border: "border-green-500", textCol: "text-green-400", bg: "bg-gradient-to-br from-green-900/30 to-black/60" },
+                       { title: "Swap for $DUMF", text: "Welcome to the colony.", icon: "🐛", 
+                         border: "border-blue-500", textCol: "text-blue-400", bg: "bg-gradient-to-br from-blue-900/30 to-black/60" }
                     ].map((step, i) => (
                       <div key={i} className={`relative flex items-center mb-10 ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} flex-row`}>
                         <div className="hidden md:block w-1/2"></div>
-                        <div className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 w-14 h-14 bg-white border-4 border-[#d68c9e] rounded-full flex items-center justify-center z-10 shadow-lg">
-                          <span className="text-xl font-bold text-[#d68c9e]">{i + 1}</span>
+                        
+                        {/* Step Number Circle */}
+                        <div className={`absolute left-0 md:left-1/2 transform md:-translate-x-1/2 w-14 h-14 bg-[#0a2e18] border-4 ${step.border} rounded-full flex items-center justify-center z-10 shadow-lg`}>
+                          <span className={`text-xl font-bold ${step.textCol}`}>{i + 1}</span>
                         </div>
+                        
                         <div className={`ml-20 md:ml-0 md:w-1/2 ${i % 2 === 0 ? 'md:pl-10' : 'md:pr-10'}`}>
-                          <div className="bg-[#fffbf0] p-5 rounded-2xl shadow-sm border border-[#d68c9e]/20 hover:shadow-md transition-shadow">
-                             <div className="text-3xl mb-3">{step.icon}</div>
-                             <h3 className="text-lg font-bold text-[#1a4d2e] mb-1">{step.title}</h3>
-                             <p className="text-[#8a6a6a] text-sm font-medium">{step.text}</p>
-                             {i === 2 && <button onClick={handleBuy} className="mt-3 text-[#d68c9e] font-bold text-xs uppercase tracking-wider flex items-center gap-1 hover:underline">Launch Swap <ExternalLink size={12}/></button>}
+                          {/* Dark Glass Rainbow Tinted Card */}
+                          <div className={`${step.bg} p-6 rounded-2xl shadow-xl border ${step.border} backdrop-blur-md transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] group`}>
+                             <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300 inline-block">{step.icon}</div>
+                             <h3 className={`text-lg font-bold ${step.textCol} mb-1 font-heading tracking-wide`}>{step.title}</h3>
+                             <p className="text-gray-300 text-sm font-medium leading-relaxed">{step.text}</p>
+                             {i === 2 && (
+                               <button onClick={handleBuy} className="mt-4 text-white bg-gradient-to-r from-green-600 to-blue-600 px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-wider flex items-center gap-1 hover:brightness-110 transition-all shadow-md">
+                                 Launch Swap <ExternalLink size={12}/>
+                               </button>
+                             )}
                           </div>
                         </div>
                       </div>
@@ -371,72 +385,16 @@
               </section>
 
               {/* Badges Section */}
-              <section className="py-16 bg-[#0a2e18] border-t border-white/5">
+              <section className="py-16 border-t border-[#1a4d2e]/30 bg-black/20">
                 <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8 px-4">
                   {[{ title: "Liquidity Locked", icon: <Lock className="text-[#d68c9e]" size={32} /> },
                     { title: "Contract Verified", icon: <FileCheck className="text-blue-400" size={32} /> },
                     { title: "Audit Passed", icon: <ShieldCheck className="text-green-400" size={32} /> }].map((badge, i) => (
-                    <div key={i} className="bg-white/5 border border-white/10 p-6 rounded-xl flex flex-col items-center justify-center gap-3 text-center group hover:bg-white/10 transition-colors">
+                    <div key={i} className="bg-white/5 border border-white/10 p-6 rounded-xl flex flex-col items-center justify-center gap-3 text-center group hover:bg-white/10 transition-colors backdrop-blur-sm">
                       <div className="p-3 bg-black/20 rounded-full group-hover:scale-110 transition-transform duration-500">{badge.icon}</div>
                       <h3 className="text-white font-heading font-bold text-lg">{badge.title}</h3>
                     </div>
                   ))}
-                </div>
-              </section>
-
-              {/* Community/Team Section */}
-              <section className="py-24 px-4 bg-[#fffbf0]">
-                <div className="max-w-6xl mx-auto text-center">
-                  <h2 className="text-5xl font-heading font-bold text-[#1a4d2e] mb-12">The Colony</h2>
-                  
-                  {/* Discord/CTA Box */}
-                  <div className="bg-[#d68c9e] rounded-3xl p-10 relative overflow-hidden shadow-xl mb-16">
-                    <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
-                    <div className="relative z-10">
-                      <h3 className="text-3xl font-bold text-white mb-4">Join the Colony of Cute</h3>
-                      <p className="text-white/90 font-bold mb-8 max-w-2xl mx-auto">We are building the coziest corner of DeFi. Memes, merch, and wholesome vibes only.</p>
-                      <div className="flex flex-col md:flex-row justify-center gap-4">
-                        <button className="bg-white hover:bg-gray-100 text-[#d68c9e] px-8 py-3 rounded-xl font-bold shadow-lg transition-transform hover:-translate-y-1 flex items-center justify-center gap-2">Join Discord</button>
-                        <button className="bg-[#0a2e18] hover:bg-[#154a2b] text-white px-8 py-3 rounded-xl font-bold shadow-lg transition-transform hover:-translate-y-1 flex items-center justify-center gap-2"><Twitter size={20} /> Telegram</button>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Team */}
-                  <div className="grid md:grid-cols-3 gap-8">
-                    {[{ name: "Worm Lord", role: "Founder", color: "bg-[#e8dcdc]" },
-                      { name: "Dr. Dirt", role: "Developer", color: "bg-[#dcedc8]" },
-                      { name: "Leaf Eater", role: "Marketing", color: "bg-[#ffccbc]" }].map((member, i) => (
-                      <div key={i} className="flex flex-col items-center group">
-                        <div className={`w-32 h-32 ${member.color} rounded-full mb-4 border-4 border-white shadow-lg relative group-hover:rotate-6 transition-transform duration-300`}>
-                          <Leaf className="absolute -top-4 left-1/2 -ml-3 text-[#1a4d2e] w-6 h-6 animate-bounce" />
-                          <div className="w-full h-full flex items-center justify-center text-4xl">👾</div>
-                        </div>
-                        <h4 className="text-xl font-bold text-[#1a4d2e]">{member.name}</h4>
-                        <p className="text-[#8a6a6a] font-bold uppercase text-xs tracking-wider">{member.role}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </section>
-
-              {/* FAQ Section */}
-              <section className="py-24 px-4 bg-white">
-                <div className="max-w-3xl mx-auto">
-                  <h2 className="text-4xl font-heading font-bold text-center text-[#1a4d2e] mb-12">Frequently Asked Wiggles</h2>
-                  <div className="space-y-4">
-                    {[{ q: "Is this financial advice?", a: "No. I am a pink worm on the internet. Please do your own research." },
-                      { q: "Why use RainbowRoads Swap?", a: "It's the smoothest way to get $DUMF without getting stuck in the dirt (congestion)." },
-                      { q: "When moon?", a: "Worms live underground, but we have very high jumping capabilities." }].map((item, i) => (
-                      <details key={i} className="group bg-[#fffbf0] p-5 rounded-2xl cursor-pointer shadow-sm open:shadow-md transition-shadow border border-[#d68c9e]/10">
-                        <summary className="flex justify-between items-center font-bold text-lg text-[#1a4d2e] list-none">
-                          {item.q}
-                          <span className="bg-white p-2 rounded-full shadow-sm text-[#d68c9e] group-open:rotate-180 transition-transform"><ChevronDown size={20} /></span>
-                        </summary>
-                        <p className="mt-4 text-[#8a6a6a] leading-relaxed font-medium">{item.a}</p>
-                      </details>
-                    ))}
-                  </div>
                 </div>
               </section>
 
@@ -448,14 +406,14 @@
                     <p className="text-gray-400 max-w-sm">The only meme coin with a backbone... wait, worms don't have backbones. The only meme coin with heart.</p>
                   </div>
                   <div>
-                    <h4 className="font-bold text-lg mb-4 text-[#d68c9e]">Navigation</h4>
+                    <h4 className="font-bold text-lg mb-4 text-[#d68c9e] font-heading">Navigation</h4>
                     <ul className="space-y-2 text-gray-400">
                       <li><a href="#about" className="hover:text-white">About</a></li>
                       <li><a href="#howtobuy" className="hover:text-white">How to Buy</a></li>
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-bold text-lg mb-4 text-[#d68c9e]">Legal</h4>
+                    <h4 className="font-bold text-lg mb-4 text-[#d68c9e] font-heading">Legal</h4>
                     <ul className="space-y-2 text-gray-400">
                       <li><a href="#" className="hover:text-white">Disclaimer</a></li>
                       <li><a href="#" className="hover:text-white">Privacy</a></li>
@@ -472,8 +430,8 @@
                 {easterEggActive && (
                   <div className="fixed inset-0 bg-black/90 z-[60] flex items-center justify-center p-4">
                       <div className="text-center">
-                        <h2 className="text-6xl mb-4">YOU FOUND THE SECRET WORM HOLE!</h2>
-                        <p className="text-2xl text-[#d68c9e] mb-8">Take a screenshot, you are early.</p>
+                        <h2 className="text-6xl mb-4 font-heading text-[#d68c9e]">YOU FOUND THE SECRET WORM HOLE!</h2>
+                        <p className="text-2xl text-[#4ade80] mb-8">Take a screenshot, you are early.</p>
                         <button onClick={() => setEasterEggActive(false)} className="bg-white text-black px-8 py-3 rounded-full font-bold hover:bg-gray-200">Close</button>
                       </div>
                   </div>
