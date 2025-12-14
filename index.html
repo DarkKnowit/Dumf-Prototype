@@ -226,79 +226,105 @@
 
               {/* About Section - Constitution Update */}
               <section id="about" className="py-24 px-4 bg-[#fffbf0] rounded-t-[3rem] relative z-10">
-                <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+                <div className="max-w-5xl mx-auto">
                   
-                  {/* Character Image Side */}
-                  <div className="relative group order-2 md:order-1 flex justify-center">
-                     <div className="absolute inset-0 bg-[#d68c9e] rounded-[2.5rem] rotate-6 group-hover:rotate-3 transition-transform opacity-20 w-3/4 mx-auto h-full"></div>
-                     {/* Updated with the provided local file name */}
-                     <img 
-                       src="dumf-consititution.png" 
-                       alt="Dumf Constitution" 
-                       className="relative w-3/4 h-auto object-contain transform transition-transform group-hover:scale-[1.02] drop-shadow-xl z-10"
-                     />
-                     {/* Badge Overlay */}
-                     <div className="absolute bottom-10 right-10 md:right-20 bg-[#1a4d2e] text-white w-24 h-24 rounded-full flex flex-col items-center justify-center font-bold text-center p-2 border-4 border-[#fffbf0] shadow-lg rotate-12 z-20">
-                       <span className="text-[10px] text-[#d68c9e] uppercase tracking-widest leading-tight">Official</span>
-                       <span className="text-lg leading-none">MEMBER</span>
-                     </div>
+                  {/* Unified Constitution Card */}
+                  <div className="bg-[#051a0d] rounded-[3rem] p-8 md:p-12 relative overflow-hidden shadow-2xl border-4 border-[#1a4d2e]">
+                    
+                    {/* Background Scanlines & Watermark */}
+                    <div className="absolute inset-0 opacity-20 pointer-events-none" 
+                         style={{ backgroundImage: 'linear-gradient(#000 50%, transparent 50%)', backgroundSize: '100% 4px' }}>
+                    </div>
+                    <div className="absolute top-1/2 right-0 -translate-y-1/2 text-[#1a4d2e]/10 text-[20rem] font-heading font-bold pointer-events-none select-none rotate-12 whitespace-nowrap">
+                      DUMF
+                    </div>
+
+                    <div className="relative z-10 flex flex-col md:flex-row gap-10 items-center">
+                      
+                      {/* Left Side: Character */}
+                      <div className="w-full md:w-5/12 relative group">
+                         {/* Glow Effect */}
+                         <div className="absolute inset-0 bg-[#4ade80] blur-[60px] opacity-10 rounded-full"></div>
+                         
+                         {/* Character Image */}
+                         <img 
+                           src="dumf-consititution.png" 
+                           alt="Official Dumf Member" 
+                           className="relative w-full h-auto object-contain drop-shadow-2xl transform transition-transform group-hover:scale-[1.02] z-10"
+                         />
+                         
+                         {/* Official Badge - Positioned on the image */}
+                         <div className="absolute -bottom-4 -right-4 md:-right-8 bg-[#1a4d2e] text-white w-28 h-28 rounded-full flex flex-col items-center justify-center font-bold text-center p-2 border-4 border-[#fffbf0] shadow-xl rotate-12 z-20 hover:scale-110 transition-transform cursor-default">
+                           <span className="text-[10px] text-[#4ade80] uppercase tracking-widest leading-tight">Verified</span>
+                           <span className="text-xl leading-none font-heading">HOLDER</span>
+                         </div>
+                      </div>
+
+                      {/* Right Side: Constitution Text */}
+                      <div className="w-full md:w-7/12 font-mono text-left">
+                        <div className="border-b-2 border-[#1a4d2e] pb-6 mb-6">
+                          <h2 className="text-4xl md:text-5xl font-heading font-extrabold text-[#4ade80] mb-2 tracking-wide">
+                            CONSTITUTION <span className="text-[#d68c9e] text-xl align-top opacity-80">v1.0</span>
+                          </h2>
+                          <div className="flex items-center gap-2 text-[#d68c9e] font-bold tracking-widest text-sm uppercase">
+                            <Sparkles size={16} /> Protocol: "Never Dumf"
+                          </div>
+                        </div>
+
+                        <div className="space-y-8">
+                          
+                          {/* Section: Motto */}
+                          <div>
+                            <p className="text-[#4ade80] text-lg leading-relaxed font-medium">
+                              <span className="text-[#d68c9e] font-bold mr-2">&gt;&gt; MISSION:</span>
+                              "I WILL NEVER DUMF ON YOU"
+                            </p>
+                            <p className="text-[#556b5c] mt-2 text-sm leading-relaxed">
+                              This digital artifact certifies the holder as an official <span className="text-[#4ade80] font-bold">DUMF Colony Member</span>. Immune to rugs. Sworn to vibes.
+                            </p>
+                          </div>
+
+                          {/* Section: Membership & Rights */}
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div className="bg-[#0f2819] p-4 rounded-xl border border-[#1a4d2e]/50">
+                              <h4 className="font-bold text-[#d68c9e] mb-3 flex items-center gap-2">
+                                <Users size={16} /> MEMBERSHIP
+                              </h4>
+                              <ul className="text-[#4ade80]/80 text-sm space-y-2 list-none">
+                                <li className="flex gap-2"><span className="text-[#1a4d2e]">●</span> No Dumping</li>
+                                <li className="flex gap-2"><span className="text-[#1a4d2e]">●</span> Full Disclosure</li>
+                                <li className="flex gap-2"><span className="text-[#1a4d2e]">●</span> Stay Wiggly</li>
+                              </ul>
+                            </div>
+
+                            <div className="bg-[#0f2819] p-4 rounded-xl border border-[#1a4d2e]/50">
+                              <h4 className="font-bold text-[#d68c9e] mb-3 flex items-center gap-2">
+                                <ShieldCheck size={16} /> RIGHTS
+                              </h4>
+                              <ul className="text-[#4ade80]/80 text-sm space-y-2 list-none">
+                                <li className="flex gap-2"><span className="text-[#1a4d2e]">+</span> Locked Liquidity</li>
+                                <li className="flex gap-2"><span className="text-[#1a4d2e]">+</span> Zero Hidden Fees</li>
+                                <li className="flex gap-2"><span className="text-[#1a4d2e]">+</span> Badge of Honor</li>
+                              </ul>
+                            </div>
+                          </div>
+
+                        </div>
+
+                        {/* Sign Button */}
+                        <div className="mt-8 pt-6 border-t border-[#1a4d2e] flex flex-col sm:flex-row items-center gap-4">
+                          <button onClick={handleBuy} className="bg-[#4ade80] hover:bg-[#32b565] text-[#051a0d] text-lg px-8 py-3 rounded-xl font-bold shadow-lg shadow-[#4ade80]/20 transform hover:-translate-y-1 transition-all w-full sm:w-auto flex items-center justify-center gap-2">
+                             Sign & Join <FileCheck size={20} />
+                          </button>
+                          <div className="text-[#1a4d2e] text-xs font-bold tracking-[0.2em] uppercase">
+                            $DUMF = INTEGRITY
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Text Side - Constitution */}
-                  <div className="space-y-8 order-1 md:order-2">
-                    <div>
-                      <h2 className="text-5xl font-heading font-extrabold text-[#1a4d2e] mb-2">
-                        DUMF CONSTITUTION <span className="text-[#d68c9e] text-2xl align-top font-mono">v1.0</span>
-                      </h2>
-                      <p className="text-xl font-bold text-[#d68c9e] tracking-widest uppercase flex items-center gap-2">
-                        <Sparkles size={20} /> "I Will Never Dumf On You"
-                      </p>
-                    </div>
-
-                    {/* Dark Terminal Style Constitution Card */}
-                    <div className="bg-[#0f2819] p-8 rounded-[2rem] border-2 border-[#4ade80]/20 shadow-2xl relative overflow-hidden font-mono">
-                      {/* Scanlines Effect */}
-                      <div className="absolute inset-0 opacity-5 pointer-events-none" 
-                           style={{ backgroundImage: 'linear-gradient(#000 50%, transparent 50%)', backgroundSize: '100% 4px' }}>
-                      </div>
-                      
-                      <p className="text-[#4ade80] font-medium text-lg leading-relaxed mb-6 relative z-10 border-b border-[#4ade80]/20 pb-6">
-                        <span className="text-[#d68c9e]">>> MOTTO:</span> "I WILL NEVER DUMF ON YOU"<br/><br/>
-                        This document certifies the holder as an official <span className="bg-[#4ade80] text-[#0f2819] px-1 font-bold">DUMFer</span> — immune to rug pulls, protected from dumps, sworn to integrity.
-                      </p>
-
-                      <div className="space-y-6 relative z-10 text-sm md:text-base">
-                        <div>
-                           <h4 className="font-bold text-[#d68c9e] text-lg mb-2">:: MEMBERSHIP:</h4>
-                           <ul className="text-[#4ade80]/90 space-y-2 list-none">
-                             <li className="flex gap-2">- DUMFurz don't dump.</li>
-                             <li className="flex gap-2">- DUMFurz disclose everything.</li>
-                             <li className="flex gap-2">- Stay transparent.</li>
-                           </ul>
-                        </div>
-                        
-                        <div>
-                           <h4 className="font-bold text-[#d68c9e] text-lg mb-2">:: RIGHTS:</h4>
-                           <ul className="text-[#4ade80]/90 space-y-2 list-none">
-                             <li className="flex items-center gap-2">[++++ DUMF]</li>
-                             <li className="flex items-center gap-2">- The Badge of Integrity</li>
-                             <li className="flex items-center gap-2">- Locked Liquidity</li>
-                             <li className="flex items-center gap-2">- ZERO Hidden Fees</li>
-                           </ul>
-                        </div>
-                      </div>
-                      
-                      <div className="mt-8 pt-4 border-t border-[#4ade80]/20 text-center text-[#4ade80] font-bold text-xs tracking-[0.2em] opacity-50">
-                        $DUMF = I WILL NEVER DUMF ON YOU
-                      </div>
-                    </div>
-
-                    <div className="flex gap-4">
-                      <button onClick={handleBuy} className="bg-[#1a4d2e] text-white px-8 py-4 rounded-2xl font-bold shadow-lg shadow-[#1a4d2e]/20 hover:bg-[#154a2b] hover:-translate-y-1 transition-all w-full flex items-center justify-center gap-2">
-                         Sign the Constitution <FileCheck size={18} />
-                      </button>
-                    </div>
-                  </div>
                 </div>
               </section>
 
