@@ -61,15 +61,14 @@
           const imageY = mouseY * 0.02;
           
           return (
-            <div className="relative w-64 h-64 md:w-80 md:h-80 mx-auto perspective-1000 my-6">
+            // Increased size to be approx 2x larger (w-80 on mobile, 40rem/640px on desktop)
+            <div className="relative w-80 h-80 md:w-[40rem] md:h-[40rem] mx-auto perspective-1000 my-12">
               
               {/* Main Character Image Container - Moves slightly with mouse */}
               <div className="relative w-full h-full transition-transform duration-100 ease-out will-change-transform z-10"
                    style={{ transform: `translate(${imageX}px, ${imageY}px)` }}>
                 
-                {/* PLACEHOLDER FOR MASCOT PNG
-                    Replace 'dumf-Photoroom.jpg' with your final mascot PNG file path.
-                */}
+                {/* Mascot Image */}
                 <img 
                   src="dumf-mascot.png" 
                   alt="Dumfurz Mascot" 
@@ -237,34 +236,34 @@
               <section id="about" className="py-24 px-4 relative z-10">
                 <div className="max-w-5xl mx-auto">
                   
-                  <div className="bg-[#051a0d]/80 backdrop-blur-md rounded-[3rem] p-8 md:p-12 relative overflow-hidden shadow-2xl border-4 border-[#1a4d2e]">
+                  <div className="bg-[#051a0d]/80 backdrop-blur-md rounded-[2.5rem] md:rounded-[3rem] p-6 md:p-12 relative overflow-hidden shadow-2xl border-4 border-[#1a4d2e]">
                     
                     {/* Background Effects */}
                     <div className="absolute inset-0 opacity-20 pointer-events-none" 
                          style={{ backgroundImage: 'linear-gradient(#000 50%, transparent 50%)', backgroundSize: '100% 4px' }}>
                     </div>
-                    <div className="absolute top-1/2 right-0 -translate-y-1/2 text-[#1a4d2e]/20 text-[20rem] font-heading font-bold pointer-events-none select-none rotate-12 whitespace-nowrap opacity-30">
+                    <div className="absolute top-1/2 right-0 -translate-y-1/2 text-[#1a4d2e]/20 text-[12rem] md:text-[20rem] font-heading font-bold pointer-events-none select-none rotate-12 whitespace-nowrap opacity-30">
                       DUMF
                     </div>
 
-                    <div className="relative z-10 flex flex-col md:flex-row gap-10 items-center">
+                    <div className="relative z-10 flex flex-col md:flex-row gap-8 md:gap-10 items-center">
                       
-                      {/* Left Side: Character (Scaled Up) */}
+                      {/* Left Side: Character (Scaled) */}
                       <div className="w-full md:w-1/2 relative group flex justify-center items-center">
                          {/* Glow Effect */}
                          <div className="absolute inset-0 bg-[#4ade80] blur-[70px] opacity-15 rounded-full"></div>
                          
-                         {/* Character Image - Increased size to fill space */}
+                         {/* Character Image - Centered and manageable on mobile, scaled up on desktop */}
                          <img 
-                           src="dumf-Photoroom.jpg" 
+                           src="dumf-consititution.png" 
                            alt="Official Dumf Member" 
-                           className="relative w-[130%] max-w-none h-auto object-contain drop-shadow-2xl transform transition-transform group-hover:scale-[1.02] z-10 -ml-[15%]"
+                           className="relative w-full max-w-[300px] md:max-w-none md:w-[130%] h-auto object-contain drop-shadow-2xl transform transition-transform group-hover:scale-[1.02] z-10 md:-ml-[15%]"
                          />
                          
                          {/* Official Badge */}
-                         <div className="absolute -bottom-4 right-0 md:-right-4 bg-[#1a4d2e] text-white w-28 h-28 rounded-full flex flex-col items-center justify-center font-bold text-center p-2 border-4 border-[#fffbf0] shadow-xl rotate-12 z-20 hover:scale-110 transition-transform cursor-default">
-                           <span className="text-[10px] text-[#4ade80] uppercase tracking-widest leading-tight">Verified</span>
-                           <span className="text-xl leading-none font-heading">HOLDER</span>
+                         <div className="absolute bottom-0 right-4 md:-bottom-4 md:-right-4 bg-[#1a4d2e] text-white w-20 h-20 md:w-28 md:h-28 rounded-full flex flex-col items-center justify-center font-bold text-center p-2 border-4 border-[#fffbf0] shadow-xl rotate-12 z-20 hover:scale-110 transition-transform cursor-default">
+                           <span className="text-[8px] md:text-[10px] text-[#4ade80] uppercase tracking-widest leading-tight">Verified</span>
+                           <span className="text-lg md:text-xl leading-none font-heading">HOLDER</span>
                          </div>
                       </div>
 
