@@ -31,6 +31,10 @@
         
         /* Smooth scrolling for anchor links */
         html { scroll-behavior: smooth; }
+        
+        /* Animation utilities */
+        .perspective-1000 { perspective: 1000px; }
+        .preserve-3d { transform-style: preserve-3d; }
     </style>
 </head>
 <body class="bg-[#0a2e18]">
@@ -48,6 +52,7 @@
 
         // --- SVG ASSETS ---
         const WormMascot = ({ scrollY, mouseX, mouseY }) => {
+          // Parallax calculations for the worm parts
           const bodyX = mouseX * 0.02;
           const bodyY = mouseY * 0.02 + scrollY * 0.1;
           const faceX = mouseX * 0.04;
@@ -56,35 +61,51 @@
           const glassesY = mouseY * 0.06 + scrollY * 0.2;
 
           return (
-            <div className="relative w-80 h-80 md:w-96 md:h-96 mx-auto perspective-1000">
+            // Reduced size from w-64/w-96 to w-56/w-80
+            <div className="relative w-56 h-56 md:w-80 md:h-80 mx-auto perspective-1000 my-6">
+              {/* Body Layer */}
               <div className="absolute inset-0 transition-transform duration-100 ease-out will-change-transform z-10"
                    style={{ transform: `translate(${bodyX}px, ${bodyY}px)` }}>
                 <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-2xl">
+                  {/* Main wiggly body shape */}
                   <path d="M40,160 C20,160 10,140 30,120 C50,100 40,80 60,60 C80,40 120,40 140,60 C160,80 180,90 170,130 C160,170 120,180 90,170 C60,160 60,160 40,160" fill="#ff80bf" stroke="#ff5cac" strokeWidth="3" />
+                  {/* Spots/Details */}
                   <circle cx="30" cy="130" r="3" fill="#ffb3d9" />
                   <circle cx="150" cy="70" r="4" fill="#ffb3d9" />
                   <circle cx="100" cy="50" r="3" fill="#ffb3d9" />
                   <circle cx="80" cy="160" r="4" fill="#ffb3d9" />
                 </svg>
               </div>
+
+              {/* Face Layer */}
               <div className="absolute inset-0 transition-transform duration-100 ease-out will-change-transform z-20"
                    style={{ transform: `translate(${faceX}px, ${faceY}px)` }}>
                 <svg viewBox="0 0 200 200" className="w-full h-full">
-                   <ellipse cx="120" cy="100" rx="35" ry="30" fill="#ff99cc" />
+                   {/* Cheeks */}
+                   <ellipse cx="120" cy="100" rx="35" ry="30" fill="#ff99cc" opacity="0.6" />
+                   {/* Smile */}
                    <path d="M110,115 Q120,125 130,115" fill="none" stroke="#be185d" strokeWidth="3" strokeLinecap="round" />
                 </svg>
               </div>
+
+              {/* Glasses Layer (The "Deal With It" vibe) */}
               <div className="absolute inset-0 transition-transform duration-100 ease-out will-change-transform z-30"
                    style={{ transform: `translate(${glassesX}px, ${glassesY}px) rotate(${mouseX * 0.01}deg)` }}>
                 <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-lg">
-                   <circle cx="105" cy="95" r="12" fill="black" opacity="0.8" />
-                   <circle cx="135" cy="95" r="12" fill="black" opacity="0.8" />
+                   {/* Lenses */}
+                   <circle cx="105" cy="95" r="12" fill="black" opacity="0.9" />
+                   <circle cx="135" cy="95" r="12" fill="black" opacity="0.9" />
+                   {/* Bridge */}
                    <line x1="117" y1="95" x2="123" y2="95" stroke="black" strokeWidth="2" />
+                   {/* Reflections */}
                    <circle cx="105" cy="95" r="4" fill="white" className="animate-pulse" />
                    <circle cx="135" cy="95" r="4" fill="white" className="animate-pulse" />
+                   {/* Shine */}
                    <path d="M100,90 L110,90" stroke="white" strokeWidth="2" opacity="0.5" />
                 </svg>
               </div>
+
+              {/* Floating Leaf Accessory */}
               <div className="absolute top-0 right-10 animate-bounce" style={{ animationDuration: '3s' }}>
                 <Leaf className="text-green-400 w-12 h-12 drop-shadow-lg" />
               </div>
@@ -118,22 +139,30 @@
           const handleBuy = () => window.open('https://rainbowroads.swap/dumf', '_blank');
           
           const copyContract = () => {
-            navigator.clipboard.writeText("0xDUMF...123456789");
+            // Use execCommand for better iframe compatibility in some preview environments, though navigator.clipboard is standard
+            const textArea = document.createElement("textarea");
+            textArea.value = "0xDUMF...123456789";
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textArea);
+            // Fallback alert or toast could go here
             alert("Contract Copied: 0xDUMF...123456789");
           };
 
           return (
             <div className="font-sans text-slate-800 min-h-screen overflow-x-hidden selection:bg-pink-400 selection:text-white">
               
+              {/* Navigation */}
               <nav className="fixed w-full z-50 top-0 px-6 py-4 transition-all duration-300" 
                    style={{ backgroundColor: scrollY > 50 ? 'rgba(10, 46, 24, 0.95)' : 'transparent', backdropFilter: scrollY > 50 ? 'blur(10px)' : 'none' }}>
                 <div className="max-w-7xl mx-auto flex justify-between items-center">
-                  <div className="text-2xl font-heading font-bold text-white tracking-wider flex items-center gap-2">
+                  <div className="text-2xl font-heading font-bold text-white tracking-wider flex items-center gap-2 cursor-pointer" onClick={() => window.scrollTo(0,0)}>
                     <span className="text-pink-400 text-3xl">$</span>DUMF
                   </div>
                   
                   <div className="hidden md:flex items-center gap-8 text-white font-bold text-sm tracking-wide">
-                    {['About', 'Tokenomics', 'Roadmap', 'How to Buy'].map((item) => (
+                    {['About', 'How to Buy'].map((item) => (
                       <a key={item} href={`#${item.toLowerCase().replace(/\s/g, '')}`} className="hover:text-pink-400 transition-colors uppercase">
                         {item}
                       </a>
@@ -147,9 +176,10 @@
                   </button>
                 </div>
 
+                {/* Mobile Menu */}
                 {menuOpen && (
-                  <div className="absolute top-full left-0 w-full bg-[#0f3d22] text-white p-6 flex flex-col gap-4 shadow-xl border-t border-white/10">
-                     {['About', 'Tokenomics', 'Roadmap', 'How to Buy'].map((item) => (
+                  <div className="absolute top-full left-0 w-full bg-[#0f3d22] text-white p-6 flex flex-col gap-4 shadow-xl border-t border-white/10 animate-fade-in-down">
+                      {['About', 'How to Buy'].map((item) => (
                       <a key={item} href={`#${item.toLowerCase().replace(/\s/g, '')}`} onClick={() => setMenuOpen(false)} className="text-lg font-bold">
                         {item}
                       </a>
@@ -161,7 +191,8 @@
                 )}
               </nav>
 
-              <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#082412] to-[#0a2e18] pt-20">
+              {/* Hero Section */}
+              <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#082412] to-[#0a2e18] pt-20 pb-32">
                 <div className="absolute inset-0 pointer-events-none opacity-30">
                   {[...Array(20)].map((_, i) => (
                     <div key={i} className="absolute bg-white rounded-full opacity-20 animate-pulse"
@@ -174,156 +205,107 @@
                 </div>
 
                 <div className="text-center z-10 w-full max-w-5xl mx-auto px-4">
-                  <h1 className="text-6xl md:text-8xl lg:text-9xl font-heading font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 drop-shadow-lg mb-8"
+                  <h1 className="text-6xl md:text-8xl lg:text-9xl font-heading font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 drop-shadow-lg mb-4"
                     style={{ transform: `translateY(${scrollY * -0.2}px)` }}>
                     DUMFUR'Z
                   </h1>
                   <WormMascot scrollY={scrollY} mouseX={mousePos.x} mouseY={mousePos.y} />
-                  <p className="text-green-200/80 text-xl font-bold tracking-widest uppercase mt-4 mb-8">
-                    The Cutest Worm in Crypto
-                  </p>
-                  <div className="flex flex-col md:flex-row gap-4 justify-center items-center mt-8">
-                    <button onClick={handleBuy} className="bg-yellow-400 hover:bg-yellow-300 text-black text-xl px-10 py-4 rounded-full font-bold shadow-[0_0_30px_rgba(250,204,21,0.4)] transform hover:scale-105 transition-all duration-300 w-full md:w-auto">
+                  
+                  {/* Removed the subtitle here as it moved to the section below */}
+                  
+                  <div className="flex flex-col md:flex-row gap-4 justify-center items-center mt-12">
+                    <button onClick={handleBuy} className="bg-[#d68c9e] hover:bg-[#c07a8b] text-white text-xl px-10 py-4 rounded-full font-bold shadow-[0_0_30px_rgba(214,140,158,0.4)] transform hover:scale-105 transition-all duration-300 w-full md:w-auto">
                       Buy $DUMF
                     </button>
-                    <button className="border-2 border-white/30 hover:border-white text-white text-xl px-10 py-4 rounded-full font-bold backdrop-blur-sm hover:bg-white/10 transition-all duration-300 w-full md:w-auto flex items-center justify-center gap-2">
+                    <a href="#about" className="border-2 border-white/30 hover:border-white text-white text-xl px-10 py-4 rounded-full font-bold backdrop-blur-sm hover:bg-white/10 transition-all duration-300 w-full md:w-auto flex items-center justify-center gap-2">
                       <Users size={20} /> Community
-                    </button>
+                    </a>
                   </div>
                 </div>
               </section>
 
-              <section className="relative z-20 -mt-20 pb-20 px-4">
-                <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-6">
-                  {[
-                    { title: "Safe & Snug", desc: "Liquidity locked tighter than a worm in an apple.", icon: <Lock className="text-pink-500" size={32} /> },
-                    { title: "Rainbow Swap", desc: "Integrated directly with RainbowRoads for easy access.", icon: <Sparkles className="text-blue-500" size={32} /> },
-                    { title: "Community Driven", desc: "No VCs. Just worms vibing in the dirt.", icon: <Heart className="text-red-500" size={32} /> },
-                  ].map((card, i) => (
-                    <div key={i} className="bg-[#fffbf0] p-8 rounded-3xl shadow-xl hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 group cursor-default">
-                      <div className="bg-white w-16 h-16 rounded-2xl flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform">
-                        {card.icon}
-                      </div>
-                      <h3 className="text-2xl font-bold mb-2 font-heading text-green-900">{card.title}</h3>
-                      <p className="text-gray-600 font-semibold leading-relaxed">{card.desc}</p>
-                    </div>
-                  ))}
-                </div>
-              </section>
-
+              {/* About Section - Constitution Update */}
               <section id="about" className="py-24 px-4 bg-[#fffbf0] rounded-t-[3rem] relative z-10">
                 <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-                  <div className="relative bg-white p-8 rounded-[2rem] shadow-inner border-4 border-dashed border-gray-200 transform -rotate-2 hover:rotate-0 transition-transform duration-500">
-                    <div className="absolute -top-4 -left-4 bg-pink-500 text-white font-bold px-4 py-1 rounded-full transform -rotate-12 shadow-lg">Classified Info</div>
-                    <div className="space-y-6">
-                       <div className="flex justify-between items-center border-b-2 border-gray-100 pb-4">
-                         <span className="font-bold text-gray-400 uppercase text-xs">Species</span>
-                         <span className="font-heading font-bold text-xl text-green-800">Lumbricus Cute-us</span>
-                       </div>
-                       <div className="flex justify-between items-center border-b-2 border-gray-100 pb-4">
-                         <span className="font-bold text-gray-400 uppercase text-xs">Origin</span>
-                         <span className="font-heading font-bold text-xl text-green-800">Deep Earth</span>
-                       </div>
-                       <div className="flex justify-between items-center border-b-2 border-gray-100 pb-4">
-                         <span className="font-bold text-gray-400 uppercase text-xs">Power</span>
-                         <span className="font-heading font-bold text-xl text-green-800">High APY Wiggles</span>
-                       </div>
-                       <div className="flex gap-2 mt-4">
-                         {['Cute', 'Earth-Loving', 'Wholesome'].map(tag => (
-                           <span key={tag} className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-bold">#{tag}</span>
-                         ))}
-                       </div>
-                    </div>
+                  
+                  {/* Character Image Side */}
+                  <div className="relative group order-2 md:order-1 flex justify-center">
+                     <div className="absolute inset-0 bg-[#d68c9e] rounded-[2.5rem] rotate-6 group-hover:rotate-3 transition-transform opacity-20 w-3/4 mx-auto h-full"></div>
+                     {/* Updated with the provided local file name */}
+                     <img 
+                       src="dumf-consititution.png" 
+                       alt="Dumf Constitution" 
+                       className="relative w-3/4 h-auto object-contain transform transition-transform group-hover:scale-[1.02] drop-shadow-xl z-10"
+                     />
+                     {/* Badge Overlay */}
+                     <div className="absolute bottom-10 right-10 md:right-20 bg-[#1a4d2e] text-white w-24 h-24 rounded-full flex flex-col items-center justify-center font-bold text-center p-2 border-4 border-[#fffbf0] shadow-lg rotate-12 z-20">
+                       <span className="text-[10px] text-[#d68c9e] uppercase tracking-widest leading-tight">Official</span>
+                       <span className="text-lg leading-none">MEMBER</span>
+                     </div>
                   </div>
-                  <div className="space-y-6">
-                    <h2 className="text-5xl md:text-6xl font-heading font-extrabold text-[#0a2e18] leading-tight">
-                      What the hell is <br/>
-                      <span className="text-pink-500 relative">DUMFURZ?
-                        <svg className="absolute w-full h-3 -bottom-1 left-0" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0,5 Q50,10 100,5" stroke="#fbbf24" strokeWidth="4" fill="none" /></svg>
-                      </span>
-                    </h2>
-                    <p className="text-xl text-gray-600 font-medium leading-relaxed">We noticed crypto was getting too serious. Too many dogs, too many frogs, not enough invertebrate representation.</p>
-                    <p className="text-xl text-gray-600 font-medium leading-relaxed">Dumfur'z is a community-first token built on friendship, memes, and sustainable tokenomics. We don't bark, we wiggle.</p>
-                    <ul className="space-y-3 pt-4">
-                      {["100% Organic, Gluten-Free Code", "Integrated with RainbowRoads Swap", "Wormhole Technology (Just kidding, it's just a bridge)"].map((item, i) => (
-                        <li key={i} className="flex items-center gap-3 text-lg font-bold text-green-800">
-                          <div className="bg-green-200 p-1 rounded-full"><ArrowRight size={16} /></div>{item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </section>
 
-              <section id="tokenomics" className="py-24 px-4 bg-[#0d3b1f] text-white overflow-hidden relative">
-                <div className="absolute top-0 left-0 w-full h-20 bg-[#fffbf0] rounded-b-[50%] transform scale-x-150"></div>
-                <div className="max-w-6xl mx-auto relative pt-10">
-                  <h2 className="text-5xl font-heading font-bold text-center mb-16">Worm-o-nomics</h2>
-                  <div className="grid lg:grid-cols-3 gap-12 items-center">
-                    <div className="space-y-6">
-                      {[{ label: "Liquidity Pool", val: "40%", color: "bg-teal-400" }, { label: "Community", val: "30%", color: "bg-pink-400" }].map((stat, i) => (
-                        <div key={i} className="bg-white/5 backdrop-blur-lg p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
-                          <div className={`w-3 h-3 ${stat.color} rounded-full mb-2`}></div>
-                          <h4 className="text-gray-300 text-sm uppercase tracking-wider font-bold">{stat.label}</h4>
-                          <p className="text-4xl font-heading font-bold">{stat.val}</p>
-                        </div>
-                      ))}
+                  {/* Text Side - Constitution */}
+                  <div className="space-y-8 order-1 md:order-2">
+                    <div>
+                      <h2 className="text-5xl font-heading font-extrabold text-[#1a4d2e] mb-2">
+                        DUMF CONSTITUTION <span className="text-[#d68c9e] text-2xl align-top font-mono">v1.0</span>
+                      </h2>
+                      <p className="text-xl font-bold text-[#d68c9e] tracking-widest uppercase flex items-center gap-2">
+                        <Sparkles size={20} /> "I Will Never Dumf On You"
+                      </p>
                     </div>
-                    <div className="flex flex-col items-center justify-center">
-                      <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full shadow-2xl transition-transform duration-700 hover:scale-105"
-                           style={{ background: `conic-gradient(#2dd4bf 0% 40%, #f472b6 40% 70%, #fbbf24 70% 90%, #f87171 90% 100%)` }}>
-                        <div className="absolute inset-4 bg-[#0d3b1f] rounded-full flex items-center justify-center flex-col">
-                          <span className="text-5xl font-heading font-bold">1B</span>
-                          <span className="text-green-300 text-sm font-bold uppercase tracking-widest">Total Supply</span>
+
+                    {/* Dark Terminal Style Constitution Card */}
+                    <div className="bg-[#0f2819] p-8 rounded-[2rem] border-2 border-[#4ade80]/20 shadow-2xl relative overflow-hidden font-mono">
+                      {/* Scanlines Effect */}
+                      <div className="absolute inset-0 opacity-5 pointer-events-none" 
+                           style={{ backgroundImage: 'linear-gradient(#000 50%, transparent 50%)', backgroundSize: '100% 4px' }}>
+                      </div>
+                      
+                      <p className="text-[#4ade80] font-medium text-lg leading-relaxed mb-6 relative z-10 border-b border-[#4ade80]/20 pb-6">
+                        <span className="text-[#d68c9e]">>> MOTTO:</span> "I WILL NEVER DUMF ON YOU"<br/><br/>
+                        This document certifies the holder as an official <span className="bg-[#4ade80] text-[#0f2819] px-1 font-bold">DUMFer</span> — immune to rug pulls, protected from dumps, sworn to integrity.
+                      </p>
+
+                      <div className="space-y-6 relative z-10 text-sm md:text-base">
+                        <div>
+                           <h4 className="font-bold text-[#d68c9e] text-lg mb-2">:: MEMBERSHIP:</h4>
+                           <ul className="text-[#4ade80]/90 space-y-2 list-none">
+                             <li className="flex gap-2">- DUMFurz don't dump.</li>
+                             <li className="flex gap-2">- DUMFurz disclose everything.</li>
+                             <li className="flex gap-2">- Stay transparent.</li>
+                           </ul>
+                        </div>
+                        
+                        <div>
+                           <h4 className="font-bold text-[#d68c9e] text-lg mb-2">:: RIGHTS:</h4>
+                           <ul className="text-[#4ade80]/90 space-y-2 list-none">
+                             <li className="flex items-center gap-2">[++++ DUMF]</li>
+                             <li className="flex items-center gap-2">- The Badge of Integrity</li>
+                             <li className="flex items-center gap-2">- Locked Liquidity</li>
+                             <li className="flex items-center gap-2">- ZERO Hidden Fees</li>
+                           </ul>
                         </div>
                       </div>
-                      <div className="mt-8 bg-black/30 backdrop-blur-md rounded-full pl-6 pr-2 py-2 flex items-center gap-4 border border-white/10 max-w-full">
-                         <span className="font-mono text-sm md:text-base text-gray-300 truncate">0xDUMF...8888</span>
-                         <button onClick={copyContract} className="bg-white/10 hover:bg-white/20 p-2 rounded-full text-white transition-colors"><Copy size={18} /></button>
+                      
+                      <div className="mt-8 pt-4 border-t border-[#4ade80]/20 text-center text-[#4ade80] font-bold text-xs tracking-[0.2em] opacity-50">
+                        $DUMF = I WILL NEVER DUMF ON YOU
                       </div>
                     </div>
-                    <div className="space-y-6">
-                      {[{ label: "Treasury", val: "20%", color: "bg-yellow-400" }, { label: "Burn", val: "10%", color: "bg-red-400" }].map((stat, i) => (
-                        <div key={i} className="bg-white/5 backdrop-blur-lg p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors text-right">
-                          <div className={`w-3 h-3 ${stat.color} rounded-full mb-2 ml-auto`}></div>
-                          <h4 className="text-gray-300 text-sm uppercase tracking-wider font-bold">{stat.label}</h4>
-                          <p className="text-4xl font-heading font-bold">{stat.val}</p>
-                        </div>
-                      ))}
+
+                    <div className="flex gap-4">
+                      <button onClick={handleBuy} className="bg-[#1a4d2e] text-white px-8 py-4 rounded-2xl font-bold shadow-lg shadow-[#1a4d2e]/20 hover:bg-[#154a2b] hover:-translate-y-1 transition-all w-full flex items-center justify-center gap-2">
+                         Sign the Constitution <FileCheck size={18} />
+                      </button>
                     </div>
                   </div>
                 </div>
               </section>
 
-              <section id="roadmap" className="bg-[#2a231d] py-20 overflow-hidden">
-                <div className="px-6 mb-10 text-center">
-                  <h2 className="text-5xl font-heading font-bold text-[#fbbf24]">Underground Roadmap</h2>
-                  <p className="text-orange-200 mt-2">Swipe to dig deeper</p>
-                </div>
-                <div className="flex overflow-x-auto hide-scrollbar snap-x snap-mandatory px-6 md:px-[calc(50vw-160px)] gap-8 py-10 pb-20">
-                  {[{ phase: "Phase 1", title: "The Hatching", items: ["Website Launch", "Community Formation", "RainbowRoads Integration"] },
-                    { phase: "Phase 2", title: "Wiggle Out", items: ["CoinGecko Listing", "1,000 Holders", "First Charity Donation"] },
-                    { phase: "Phase 3", title: "Surface Breached", items: ["NFT Collection", "Merch Store", "CEX Listings"] },
-                    { phase: "Phase 4", title: "Global Infestation", items: ["Tier 1 Exchange", "Worm DAO", "Animation Series"] }].map((milestone, i) => (
-                    <div key={i} className="snap-center shrink-0 w-80 md:w-96 bg-[#3d332a] border border-orange-900/50 p-8 rounded-3xl relative shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] transform transition-transform hover:-translate-y-2">
-                      <div className="absolute -top-5 -right-5 bg-[#fbbf24] text-black w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl shadow-lg border-4 border-[#2a231d]">{i + 1}</div>
-                      <h3 className="text-orange-400 font-bold uppercase tracking-widest text-sm mb-2">{milestone.phase}</h3>
-                      <h4 className="text-3xl font-heading font-bold text-white mb-6">{milestone.title}</h4>
-                      <ul className="space-y-4">
-                        {milestone.items.map((item, idx) => (
-                          <li key={idx} className="flex items-center gap-3 text-gray-300"><span className="w-2 h-2 bg-green-500 rounded-full"></span>{item}</li>
-                        ))}
-                      </ul>
-                      <div className="absolute bottom-4 right-6 opacity-10"><div className="flex gap-2 text-2xl">👣 👣</div></div>
-                    </div>
-                  ))}
-                  <div className="w-6 shrink-0"></div>
-                </div>
-              </section>
-
+              {/* How to Buy Section */}
               <section id="howtobuy" className="py-24 px-4 bg-white relative">
                 <div className="max-w-4xl mx-auto">
-                  <h2 className="text-5xl font-heading font-bold text-center text-[#0a2e18] mb-16">The Quest for $DUMF</h2>
+                  <h2 className="text-5xl font-heading font-bold text-center text-[#1a4d2e] mb-16">The Quest for $DUMF</h2>
                   <div className="relative">
                     <div className="absolute left-8 top-0 bottom-0 w-1 bg-gray-100 rounded-full md:left-1/2 md:-ml-0.5"></div>
                     {[ { title: "Get a Wallet", text: "Download Metamask or Phantom.", icon: "👛" },
@@ -331,17 +313,17 @@
                        { title: "Go to RainbowRoads", text: "Our official swap partner.", icon: "🌈" },
                        { title: "Swap for $DUMF", text: "Welcome to the colony.", icon: "🐛" }
                     ].map((step, i) => (
-                      <div key={i} className={`relative flex items-center mb-12 ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} flex-row`}>
+                      <div key={i} className={`relative flex items-center mb-10 ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} flex-row`}>
                         <div className="hidden md:block w-1/2"></div>
-                        <div className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 w-16 h-16 bg-white border-4 border-pink-400 rounded-full flex items-center justify-center z-10 shadow-lg">
-                          <span className="text-2xl font-bold text-pink-500">{i + 1}</span>
+                        <div className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 w-14 h-14 bg-white border-4 border-[#d68c9e] rounded-full flex items-center justify-center z-10 shadow-lg">
+                          <span className="text-xl font-bold text-[#d68c9e]">{i + 1}</span>
                         </div>
-                        <div className={`ml-20 md:ml-0 md:w-1/2 ${i % 2 === 0 ? 'md:pl-12' : 'md:pr-12'}`}>
-                          <div className="bg-[#fdfbf7] p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                             <div className="text-4xl mb-4">{step.icon}</div>
-                             <h3 className="text-xl font-bold text-gray-800 mb-2">{step.title}</h3>
-                             <p className="text-gray-600">{step.text}</p>
-                             {i === 2 && <button onClick={handleBuy} className="mt-4 text-pink-500 font-bold text-sm flex items-center gap-1 hover:underline">Launch Swap <ExternalLink size={14}/></button>}
+                        <div className={`ml-20 md:ml-0 md:w-1/2 ${i % 2 === 0 ? 'md:pl-10' : 'md:pr-10'}`}>
+                          <div className="bg-[#fffbf0] p-5 rounded-2xl shadow-sm border border-[#d68c9e]/20 hover:shadow-md transition-shadow">
+                             <div className="text-3xl mb-3">{step.icon}</div>
+                             <h3 className="text-lg font-bold text-[#1a4d2e] mb-1">{step.title}</h3>
+                             <p className="text-[#8a6a6a] text-sm font-medium">{step.text}</p>
+                             {i === 2 && <button onClick={handleBuy} className="mt-3 text-[#d68c9e] font-bold text-xs uppercase tracking-wider flex items-center gap-1 hover:underline">Launch Swap <ExternalLink size={12}/></button>}
                           </div>
                         </div>
                       </div>
@@ -350,85 +332,92 @@
                 </div>
               </section>
 
+              {/* Badges Section */}
               <section className="py-16 bg-[#0a2e18] border-t border-white/5">
                 <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8 px-4">
-                  {[{ title: "Liquidity Locked", icon: <Lock className="text-yellow-400" size={40} /> },
-                    { title: "Contract Verified", icon: <FileCheck className="text-blue-400" size={40} /> },
-                    { title: "Audit Passed", icon: <ShieldCheck className="text-green-400" size={40} /> }].map((badge, i) => (
-                    <div key={i} className="bg-white/5 border border-white/10 p-8 rounded-xl flex flex-col items-center justify-center gap-4 text-center group hover:bg-white/10 transition-colors">
-                      <div className="p-4 bg-black/20 rounded-full group-hover:scale-110 transition-transform duration-500">{badge.icon}</div>
-                      <h3 className="text-white font-heading font-bold text-xl">{badge.title}</h3>
+                  {[{ title: "Liquidity Locked", icon: <Lock className="text-[#d68c9e]" size={32} /> },
+                    { title: "Contract Verified", icon: <FileCheck className="text-blue-400" size={32} /> },
+                    { title: "Audit Passed", icon: <ShieldCheck className="text-green-400" size={32} /> }].map((badge, i) => (
+                    <div key={i} className="bg-white/5 border border-white/10 p-6 rounded-xl flex flex-col items-center justify-center gap-3 text-center group hover:bg-white/10 transition-colors">
+                      <div className="p-3 bg-black/20 rounded-full group-hover:scale-110 transition-transform duration-500">{badge.icon}</div>
+                      <h3 className="text-white font-heading font-bold text-lg">{badge.title}</h3>
                     </div>
                   ))}
                 </div>
               </section>
 
+              {/* Community/Team Section */}
               <section className="py-24 px-4 bg-[#fffbf0]">
                 <div className="max-w-6xl mx-auto text-center">
-                  <h2 className="text-5xl font-heading font-bold text-[#0a2e18] mb-12">The Colony</h2>
-                  <div className="bg-[#fbbf24] rounded-3xl p-12 relative overflow-hidden shadow-xl mb-20">
+                  <h2 className="text-5xl font-heading font-bold text-[#1a4d2e] mb-12">The Colony</h2>
+                  
+                  {/* Discord/CTA Box */}
+                  <div className="bg-[#d68c9e] rounded-3xl p-10 relative overflow-hidden shadow-xl mb-16">
                     <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
                     <div className="relative z-10">
-                      <h3 className="text-3xl font-bold text-black mb-6">Join the Colony of Cute</h3>
-                      <p className="text-black/70 font-bold mb-8 max-w-2xl mx-auto">We are building the coziest corner of DeFi. Memes, merch, and wholesome vibes only.</p>
-                      <div className="flex justify-center gap-4">
-                        <button className="bg-[#5865F2] hover:bg-[#4752c4] text-white px-8 py-3 rounded-xl font-bold shadow-lg transition-transform hover:-translate-y-1 flex items-center gap-2">Join Discord</button>
-                        <button className="bg-[#229ED9] hover:bg-[#1c86b8] text-white px-8 py-3 rounded-xl font-bold shadow-lg transition-transform hover:-translate-y-1 flex items-center gap-2"><Twitter size={20} /> Telegram</button>
+                      <h3 className="text-3xl font-bold text-white mb-4">Join the Colony of Cute</h3>
+                      <p className="text-white/90 font-bold mb-8 max-w-2xl mx-auto">We are building the coziest corner of DeFi. Memes, merch, and wholesome vibes only.</p>
+                      <div className="flex flex-col md:flex-row justify-center gap-4">
+                        <button className="bg-white hover:bg-gray-100 text-[#d68c9e] px-8 py-3 rounded-xl font-bold shadow-lg transition-transform hover:-translate-y-1 flex items-center justify-center gap-2">Join Discord</button>
+                        <button className="bg-[#0a2e18] hover:bg-[#154a2b] text-white px-8 py-3 rounded-xl font-bold shadow-lg transition-transform hover:-translate-y-1 flex items-center justify-center gap-2"><Twitter size={20} /> Telegram</button>
                       </div>
                     </div>
                   </div>
+
+                  {/* Team */}
                   <div className="grid md:grid-cols-3 gap-8">
-                    {[{ name: "Worm Lord", role: "Founder", color: "bg-pink-200" },
-                      { name: "Dr. Dirt", role: "Developer", color: "bg-blue-200" },
-                      { name: "Leaf Eater", role: "Marketing", color: "bg-green-200" }].map((member, i) => (
+                    {[{ name: "Worm Lord", role: "Founder", color: "bg-[#e8dcdc]" },
+                      { name: "Dr. Dirt", role: "Developer", color: "bg-[#dcedc8]" },
+                      { name: "Leaf Eater", role: "Marketing", color: "bg-[#ffccbc]" }].map((member, i) => (
                       <div key={i} className="flex flex-col items-center group">
-                        <div className={`w-40 h-40 ${member.color} rounded-full mb-6 border-4 border-white shadow-lg relative group-hover:rotate-6 transition-transform duration-300`}>
-                          <Leaf className="absolute -top-4 left-1/2 -ml-3 text-green-500 w-6 h-6 animate-bounce" />
+                        <div className={`w-32 h-32 ${member.color} rounded-full mb-4 border-4 border-white shadow-lg relative group-hover:rotate-6 transition-transform duration-300`}>
+                          <Leaf className="absolute -top-4 left-1/2 -ml-3 text-[#1a4d2e] w-6 h-6 animate-bounce" />
                           <div className="w-full h-full flex items-center justify-center text-4xl">👾</div>
                         </div>
-                        <h4 className="text-2xl font-bold text-green-900">{member.name}</h4>
-                        <p className="text-gray-500 font-bold uppercase text-sm tracking-wider">{member.role}</p>
+                        <h4 className="text-xl font-bold text-[#1a4d2e]">{member.name}</h4>
+                        <p className="text-[#8a6a6a] font-bold uppercase text-xs tracking-wider">{member.role}</p>
                       </div>
                     ))}
                   </div>
                 </div>
               </section>
 
+              {/* FAQ Section */}
               <section className="py-24 px-4 bg-white">
                 <div className="max-w-3xl mx-auto">
-                  <h2 className="text-4xl font-heading font-bold text-center text-[#0a2e18] mb-12">Frequently Asked Wiggles</h2>
+                  <h2 className="text-4xl font-heading font-bold text-center text-[#1a4d2e] mb-12">Frequently Asked Wiggles</h2>
                   <div className="space-y-4">
                     {[{ q: "Is this financial advice?", a: "No. I am a pink worm on the internet. Please do your own research." },
                       { q: "Why use RainbowRoads Swap?", a: "It's the smoothest way to get $DUMF without getting stuck in the dirt (congestion)." },
                       { q: "When moon?", a: "Worms live underground, but we have very high jumping capabilities." }].map((item, i) => (
-                      <details key={i} className="group bg-[#fdfbf7] p-6 rounded-2xl cursor-pointer shadow-sm open:shadow-md transition-shadow">
-                        <summary className="flex justify-between items-center font-bold text-lg text-green-900 list-none">
+                      <details key={i} className="group bg-[#fffbf0] p-5 rounded-2xl cursor-pointer shadow-sm open:shadow-md transition-shadow border border-[#d68c9e]/10">
+                        <summary className="flex justify-between items-center font-bold text-lg text-[#1a4d2e] list-none">
                           {item.q}
-                          <span className="bg-white p-2 rounded-full shadow-sm text-pink-500 group-open:rotate-180 transition-transform"><ChevronDown size={20} /></span>
+                          <span className="bg-white p-2 rounded-full shadow-sm text-[#d68c9e] group-open:rotate-180 transition-transform"><ChevronDown size={20} /></span>
                         </summary>
-                        <p className="mt-4 text-gray-600 leading-relaxed font-medium">{item.a}</p>
+                        <p className="mt-4 text-[#8a6a6a] leading-relaxed font-medium">{item.a}</p>
                       </details>
                     ))}
                   </div>
                 </div>
               </section>
 
+              {/* Footer */}
               <footer className="bg-[#051a0d] text-white pt-20 pb-10 px-6 relative overflow-hidden">
                 <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12 border-b border-white/10 pb-12 mb-12">
                   <div className="col-span-1 md:col-span-2">
-                    <h2 className="text-4xl font-heading font-bold mb-6 text-pink-400">DUMFUR'Z</h2>
+                    <h2 className="text-4xl font-heading font-bold mb-6 text-[#d68c9e]">DUMFUR'Z</h2>
                     <p className="text-gray-400 max-w-sm">The only meme coin with a backbone... wait, worms don't have backbones. The only meme coin with heart.</p>
                   </div>
                   <div>
-                    <h4 className="font-bold text-lg mb-4 text-yellow-400">Navigation</h4>
+                    <h4 className="font-bold text-lg mb-4 text-[#d68c9e]">Navigation</h4>
                     <ul className="space-y-2 text-gray-400">
                       <li><a href="#about" className="hover:text-white">About</a></li>
                       <li><a href="#howtobuy" className="hover:text-white">How to Buy</a></li>
-                      <li><a href="#roadmap" className="hover:text-white">Roadmap</a></li>
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-bold text-lg mb-4 text-yellow-400">Legal</h4>
+                    <h4 className="font-bold text-lg mb-4 text-[#d68c9e]">Legal</h4>
                     <ul className="space-y-2 text-gray-400">
                       <li><a href="#" className="hover:text-white">Disclaimer</a></li>
                       <li><a href="#" className="hover:text-white">Privacy</a></li>
@@ -444,11 +433,11 @@
                 </div>
                 {easterEggActive && (
                   <div className="fixed inset-0 bg-black/90 z-[60] flex items-center justify-center p-4">
-                     <div className="text-center">
-                       <h2 className="text-6xl mb-4">YOU FOUND THE SECRET WORM HOLE!</h2>
-                       <p className="text-2xl text-pink-400 mb-8">Take a screenshot, you are early.</p>
-                       <button onClick={() => setEasterEggActive(false)} className="bg-white text-black px-8 py-3 rounded-full font-bold hover:bg-gray-200">Close</button>
-                     </div>
+                      <div className="text-center">
+                        <h2 className="text-6xl mb-4">YOU FOUND THE SECRET WORM HOLE!</h2>
+                        <p className="text-2xl text-[#d68c9e] mb-8">Take a screenshot, you are early.</p>
+                        <button onClick={() => setEasterEggActive(false)} className="bg-white text-black px-8 py-3 rounded-full font-bold hover:bg-gray-200">Close</button>
+                      </div>
                   </div>
                 )}
               </footer>
